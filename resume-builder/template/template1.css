@@ -1,0 +1,35 @@
+  body {
+    font-family: Arial
+  }
+
+  .information {
+    float:right; font-size: 15px; text-align: right;
+    font-weight: normal;
+  }
+
+  .text_size {
+    font-weight: normal; font-size: 15.5px;
+  }
+
+  .full_container {
+  }
+
+  .page_container {
+    width: 8.5in; height:11in; outline: 1px dashed blue;
+  }
+
+  .border {
+    padding: 0.75in;
+  }
+
+  .inner_border {
+    max-width: 7in; max-height:9.5in; outline: 1px dashed yellow;
+  }
+
+  h3 {
+    margin-top: 0.15in; margin-bottom: 0.08in;
+  }
+
+  li {
+    margin-left: 0.15in;
+  }

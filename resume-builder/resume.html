@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Resume Builder</title>
+	<script src="config.js"></script>
+</head>
+
+<style>
+	/* yoinked from W3Schools */
+	/* change full_container to this when implementing save features */
+	.export_full_container {
+    	top:0; left:0; position:absolute;
+  	}
+
+	.spacer {
+		width:5px;
+		height:auto;
+		display:inline-block;
+	}
+
+	/* The sidebar menu */
+	.sidenav {
+	  height: 100%; /* Full-height: remove this if you want "auto" height */
+	  width: 220px; /* Set the width of the sidebar */
+	  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+	  z-index: 1; /* Stay on top */
+	  top: 0; /* Stay at the top */
+	  left: 0;
+	  background-color: #03254c; /* Black */
+	  overflow-x: hidden; /* Disable horizontal scroll */
+	  padding-top: 20px;
+	}
+
+	/* The navigation menu links */
+	.sidenav button {
+		border: solid;
+		border-width: 2px;
+		border-color: #187bcd;
+		background-color: #2a9df4;
+	  	padding: 6px 8px 6px 8px;
+	  	font-size: 18px;
+	  	color: white;
+	  	display: block
+	}
+
+	/* When you mouse over the navigation links, change their color */
+	.sidenav button:hover {
+	  color: #f1f1f1;
+	}
+
+	/* Style page content */
+	.main {
+	  margin-left: 220px; /* Same as the width of the sidebar */
+	  padding: 0px 10px;
+	}
+
+	/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+	@media screen and (max-height: 450px) {
+	  .sidenav {padding-top: 15px;}
+	  .sidenav button {font-size: 18px;}
+	}
+
+
+</style>
+
+<body>
+<!-- Need to build Resume Loader then Resume Builder -->
+	
+<script>
+	// yoinked from stackoverflow.com/a/21446426
+	function json_processor(event) {
+		try {
+			var file, reader;
+      		file = event.target.files[0];
+			console.log(typeof file);
+			reader = new FileReader();
+			reader.onload = receivedText;
+			reader.readAsText(file);
+
+			function receivedText(e) {
+			    var resume = JSON.parse(JSON.stringify(e.target.result)); 
+			}
+		}
+		catch(err) {
+			alert("JSON file not found or corrupted.");
+		}
+	}
+
+	function choose_template_js(template) {
+		// yoinked from stackoverflow.com/a/14521482
+		var script = document.createElement('script');
+		script.onload = async function () {
+		    resume_json_build();
+		};
+		script.src = './template/template' + template.toString() + '.js';
+		
+		// yoinked from stackoverflow.com/a/577002
+		var cssId = 'myCss';  // you could encode the css path itself to generate id..
+		if (!document.getElementById(cssId))
+		{
+		    var head  = document.getElementsByTagName('head')[0];
+		    var link  = document.createElement('link');
+		    link.id   = cssId;
+		    link.rel  = 'stylesheet';
+		    link.type = 'text/css';
+		    link.href = './template/template' + template.toString() + '.css';
+		    link.media = 'all';
+		    head.appendChild(link);
+		}
+
+		document.head.appendChild(script);		
+	}
+
+	var setDefaultsFlag = false
+	function resume_json_build() {
+		document.getElementById("main_menu").style.display = "none"
+		document.getElementById("sidebar").style.display = "block"
+		document.getElementById("view").style.display = "block"
+		// just realized all of this shit need custom logic
+		// this function uses the custom logic provided in the template/js
+		JSbuildResume(document.getElementById("canvas"), setDefaultsFlag)
+	}
+
+</script>
+
+	<div class="sidenav">
+		<button style="font-size: 25px; border: 10px;" disabled>Resume Builder</button>
+		<div class="spacer"></div>
+
+		<div id="sidebar" style="display: none">
+			<button>Edit Name Header</button>
+			<div id="header_toolbar" style="display: none;">
+				<button>Upload Custom Header</button>
+				<button>Exit Heading Editing</button>
+			</div>
+			<div class="spacer"></div>
+
+			<button>Catagory Editing</button>
+			<div id="catagory_toolbar" style="display: none;">
+				<h1>Selected: tobeimpBox</h1>
+				<button>Upload Custom Catagory Header</button>
+				<button>Exit Catagory Editing</button>
+			</div>
+			<div class="spacer"></div>
+
+		  	<button>New Entry</button>
+		  	<button>Edit Entry</button>
+
+		  	<div class="spacer"></div>
+		  	<button>Export HTML</button>
+		</div>
+	</div>
+	
+	<div class="main" id="main_menu">
+		<h1>Build a new resume from a template? <br>(Click a Template)</h1>
+		<div style="overflow:auto;width:85%;">
+			<table><tr>
+				<th><img src="./template/template1.jpg" width=170px height=220px onclick="choose_template_js(1)"></th>
+				<th><img src="./template/template2.jpg" width=170px height=220px onclick="choose_template_js(2)"></th>
+				<th><img src="./template/template3.jpg" width=170px height=220px onclick="choose_template_js(3)"></th>
+				<th><img src="./template/template4.jpg" width=170px height=220px onclick="choose_template_js(4)"></th>
+				<th><img src="./template/template5.jpg" width=170px height=220px onclick="choose_template_js(5)"></th>
+				<th><img src="./template/template6.jpg" width=170px height=220px onclick="choose_template_js(6)"></th>
+				<th><img src="./template/template7.jpg" width=170px height=220px onclick="choose_template_js(7)"></th>
+				<th><img src="./template/template8.jpg" width=170px height=220px onclick="choose_template_js(8)"></th>
+			</tr></table>
+			<input type="checkbox" id="default_box" name="defaults" onchange="setDefaultsFlag = !setDefaultsFlag">
+			<label for="defaults">Set Default Template Data?</label>
+		</div>
+
+		<h1>Open a saved resume?</h1>
+		<label id="resume_json_label" for="resume_json">Select a file:</label>
+		<input type="file" id="resume_html" accept=".html">
+
+		<button onclick="resume_html_build()">Edit</button>
+		<button onclick="resume_html_view()">View</button>
+	</div>
+
+	<div class="main" style="display:none;" id="view">
+		<div class="full_container">
+			<div align=left class="page_container" id="page">
+				<div class="border" id="border_page">
+					<div class="inner_border" id="canvas">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

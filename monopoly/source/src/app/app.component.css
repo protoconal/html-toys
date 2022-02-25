@@ -1,0 +1,7 @@
+mat-grid-tile {
+    background: lightgray;
+  }
+
+.spacer {
+    display: inline-block; height: 10px;
+}

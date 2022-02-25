@@ -1,0 +1,143 @@
+<div style="width: 97.5%; margin: auto; min-width: 300px; max-width: 800px">
+
+<h1>Monopoly Game Helper</h1>
+
+<div style="height: 10px; display: none;" #moneyCounter>
+    <mat-grid-list cols="7" rowHeight="1:2">
+        <mat-grid-tile *ngFor="let money of balanceKeys" style="min-height: 105px; border-radius: 10px;">
+            <div style="width: 90%; display: flex; flex-direction: column; align-items: center;">
+                <img width="90%" [src]="imgDirRoot+money+'.png'">
+                <span class="spacer"></span>
+                <button mat-stroked-button disabled style="width: 90%; color: black;">{{ balance[+money] }}</button>
+                <span class="spacer"></span>
+                <div style="display: flex; justify-content: space-between; width: 90%;">
+                    <button color="primary" (click)="addScore(+money)" mat-icon-button style="width:48.5%; border-radius: 5px; background: lightcyan;"><mat-icon>add</mat-icon> </button>
+                    <button color="accent" (click)="subtractScore(+money)" mat-icon-button style="width:48.5%; border-radius: 5px; background: lightcoral;"><mat-icon>remove</mat-icon> </button>
+                </div>
+            </div>
+        </mat-grid-tile>
+    </mat-grid-list>    
+</div>
+
+
+<span class="spacer"></span>
+<div style="display: flex; flex-direction: row; justify-content: space-evenly; ">
+    <h3> Total Balance: ${{ updateBalance() }} </h3>
+    <button color="warn" mat-flat-button *ngIf="!started" (click)="startGame()"> Start Game </button>
+    <button color="accent" mat-flat-button *ngIf="started" (click)="openDialogForm()"> Create Transaction </button>
+    <button color="accent" mat-flat-button *ngIf="started" (click)="collectGo()"> Collect Go </button>
+</div>
+
+<!--
+<form autocomplete="off">
+    <h2>Debits</h2>
+    <div>
+        <mat-form-field appearance="fill">
+            <mat-label>Account</mat-label>
+            <mat-select>
+                <mat-option *ngFor="let account of sortedAccounts[0].concat(sortedAccounts[1])" value="{{account}}" >{{account}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>$</mat-label>
+            <input matInput type="number">
+        </mat-form-field>
+    </div>
+    
+    <h2>Credit</h2>
+    <div>
+        <mat-form-field appearance="fill">
+            <mat-label>Account</mat-label>
+            <mat-select>
+                <mat-option *ngFor="let account of sortedAccounts[2]" value="{{account}}">{{account}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>$</mat-label>
+            <input matInput>
+        </mat-form-field>
+    </div>
+</form>
+-->
+
+<ng-template #dialogTemplate>
+    <app-transaction-form (formDetails)="handleFormSubmit($event)" [sortedAccounts] = "sortedAccounts" [players] = "players" mat-dialog-content>
+    </app-transaction-form>
+</ng-template>
+
+<span class="spacer"></span>
+
+<mat-accordion>
+    <mat-expansion-panel *ngFor="let transaction of journal; index as i">
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            Transaction {{ i+1 }}
+        </mat-panel-title>
+        <mat-panel-description>
+            
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+        <h2>Debits</h2>
+        <table *ngFor="let debit of transaction[0][0]; index as x" style="width: 100%;">
+            <tr>
+                <td style="width: 75%;">{{ debit }}</td>
+                <td>$ {{ transaction[0][1][x] }}</td>
+            </tr>
+        </table>
+        <h2>Credits</h2>
+        <table *ngFor="let debit of transaction[1][0]; index as x" style="width: 100%;">
+            <tr>
+                <td style="width: 75%;">{{ debit }}</td>
+                <td>$ {{ transaction[1][1][x] }}</td>
+            </tr>
+        </table>
+
+        <p><b>Description:</b>&nbsp;<i>{{transaction[2][0][0]}}</i></p>
+        <p><b>Date:</b>&nbsp;<i>{{transaction[2][0][1]}}</i></p>
+    </mat-expansion-panel>
+</mat-accordion>
+
+<br>
+
+<mat-accordion>
+    <mat-expansion-panel>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            Players
+        </mat-panel-title>
+        <mat-panel-description>
+            Update Player Names
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-evenly">
+            <mat-form-field appearance="fill" id="playersPanel"> 
+                <mat-label>Player 1 Name</mat-label>
+                <input matInput type="text" value="{{ players[0] }}">
+            </mat-form-field>
+            <mat-form-field appearance="fill"> 
+                <mat-label>Player 2 Name</mat-label>
+                <input matInput type="text" value="{{ players[1] }}">
+            </mat-form-field>
+            <mat-form-field appearance="fill"> 
+                <mat-label>Player 3 Name</mat-label>
+                <input matInput type="text" value="{{ players[2] }}">
+            </mat-form-field>
+            <mat-form-field appearance="fill"> 
+                <mat-label>Player 4 Name</mat-label>
+                <input matInput type="text" value="{{ players[3] }}">
+            </mat-form-field>    
+        </div>
+        <div style="display: flex; justify-content: space-evenly">
+            <button color="accent" mat-raised-button (click)="updatePlayers()"> Update Players </button>
+        </div>
+    </mat-expansion-panel>
+</mat-accordion>
+
+<span class="spacer"></span>
+
+<div style="display: flex; flex-direction: row; justify-content: space-evenly; ">
+    <button color="primary" *ngIf="started" mat-flat-button (click)="downloadJournal()"> Download Journal </button>
+    <button color="accent" mat-flat-button (click)="generateFilePrompt()"> Upload Journal </button>
+</div>
+
+<span class="spacer"></span>

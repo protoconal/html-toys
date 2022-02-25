@@ -1,0 +1,101 @@
+<div style="margin: auto; max-width: 430px;">
+  <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div class="title-flex">
+      <h2>Debits</h2>
+      <button (click)="addDebit()" type="button" color="accent" mat-flat-button style="height: 75%;">+ Add another Debit</button>
+    </div>
+    <div class="title-flex" *ngFor="let _ of debitAccounts.controls; let i=index">
+      <mat-form-field style="width: 49%;" appearance="fill" formArrayName="debitAccounts">
+        <mat-label>Account</mat-label>
+        <mat-select id="debitAccount-{{ i }}" type="text" [formControlName]="i">
+          <mat-option *ngFor="let account of sortedAccounts[0].concat(sortedAccounts[1]).concat(sortedAccounts[3])" value="{{account}}" >{{account}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field style="width: 49%;" appearance="fill" formArrayName="debitAmounts">
+        <mat-label>Amount $:</mat-label>
+        <input matInput id="debitAmount-{{ i }}" type="text" [formControlName]="i">
+      </mat-form-field>
+    </div>
+  
+    <div class="title-flex">
+      <h2>Credits</h2>
+      <button (click)="addCredit()" type="button" color="accent" mat-flat-button>+ Add another Credit</button>
+    </div>
+    <div class="title-flex" *ngFor="let _ of creditAccounts.controls; let i=index">
+      <mat-form-field style="width: 49%;" appearance="fill" formArrayName="creditAccounts">
+        <mat-label>Account:</mat-label>
+        <mat-select id="creditAccount-{{ i }}" type="text" [formControlName]="i">
+          <mat-option *ngFor="let account of sortedAccounts[0].concat(sortedAccounts[2]).concat(sortedAccounts[3])" value="{{account}}">{{account}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field style="width: 49%;" appearance="fill" formArrayName="creditAmounts">
+        <mat-label>Amount:</mat-label>
+        <input matInput id="creditAmount-{{ i }}" type="text" [formControlName]="i">
+      </mat-form-field>
+    </div>
+    
+    <div class="title-flex">
+      <h2>Description</h2>
+      <button (click)="showCustomText()" type="button" color="accent" mat-flat-button>Change Action Input</button>
+    </div>
+
+    <div class="title-flex">
+      <div id="action-selection" style="width: 49%;">
+        <mat-form-field appearance="fill" formArrayName="action" style="width: 100%;">
+          <mat-label>Basic actions:</mat-label>
+          <mat-select id="action" type="text" [formControlName]="0">
+            <mat-option *ngFor="let account of sortedAccounts[4]" value="{{account}}">{{account}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div id="action-text" style="display: none; width: 49%;">
+        <mat-form-field appearance="fill" formArrayName="action" style="width: 100%;">
+          <mat-label>Text Action:</mat-label>
+          <input matInput id="action" type="text" [formControlName]="0">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div *ngIf="transactionForm.value.action[0].includes('Property') || transactionForm.value.action[0] == 'Paid Rent' || transactionForm.value.action[0] == 'Collected Rent'" class="title-flex">
+      <mat-form-field style="width: 49%;" appearance="fill" formArrayName="property">
+        <mat-label>Property:</mat-label>
+        <mat-select id="property" type="text" [formControlName]="0">
+            <!-- Thanks https://stackoverflow.com/a/56832728 -->
+            <div style="width: 90%; margin: auto;">
+              <mat-form-field style="width: 100%;">
+                <mat-label for="searchPropertiesBox"> Search </mat-label>
+                <input matInput id="searchPropertiesBox" autocomplete="on" 
+                (keyup)="onAccountsKey($event.target)">
+              </mat-form-field>
+            </div>
+            <span *ngFor="let account of propertiesKeys">
+              <mat-option *ngIf=" !['Brown','Light Blue','Magenta','Orange','Red','Yellow',
+              'Green','Dark Blue','Railroads','Utilities'].includes(account)" 
+              value="{{account}}">{{account}}</mat-option>
+              <mat-option *ngIf=" ['Brown','Light Blue','Magenta','Orange','Red','Yellow',
+              'Green','Dark Blue','Railroads','Utilities'].includes(account)" 
+              value="{{account}}" disabled>{{account}}</mat-option>
+            </span>
+        </mat-select>
+      </mat-form-field>
+
+
+      <mat-form-field *ngIf="transactionForm.value.action[0] == 'Paid Rent'" style="width: 49%;" appearance="fill" formArrayName="player">
+        <mat-label>Player:</mat-label>
+        <mat-select id="player" type="text" [formControlName]="0">
+          <mat-option *ngFor="let player of players" value="{{player}}">{{player}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  
+    <p>Complete the form to enable button.</p>
+    <button type="submit" color="primary" mat-raised-button [disabled]="!transactionForm.valid">Submit</button>
+  </form>
+  
+  <hr>
+  
+  <p>Form Value: {{ transactionForm.value | json }}</p>
+  <p>Total Debits: {{ this.calcTotalDebits() }}</p>
+  <p>Total Credits: {{ this.calcTotalCredits() }}</p>
+  <p>Form Status: {{ transactionForm.status }}</p>  
+</div>

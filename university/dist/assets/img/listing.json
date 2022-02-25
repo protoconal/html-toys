@@ -1,0 +1,21 @@
+[
+    {
+        "George Brown College":"gbc.png",
+        "York University": "york.png",
+        "McMaster University":"mcmaster.png",
+        "Western University (University of Western Ontario)":"western.png",
+        "University of Ottawa": "uottawa.png",
+        "Brock University": "brock.png",
+        "Lakehead University": "lakehead.png",
+        "Durham College": "durham.png",
+        "University of Windsor": "uofwindsor.png",
+        "University of Toronto at Scarborough":"uoft.png",
+        "University of Toronto at Mississauga":"uoft.png",
+        "Seneca College of Applied Arts and Technology":"seneca.png",
+        "Laurentian University":"laurentian.png",
+        "Humber College":"humber.png",
+        "Confederation College of Applied Arts and Technology":"confederation.png",
+        "Wilfrid Laurier University":"laurier.png"
+    },
+    "not_found.png"
+]
