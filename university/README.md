@@ -11,7 +11,7 @@ You can...
  - add n number of programs to be displayed.
  - look at that program counter that shows how many are being displayed!
 
-#### App can be found hosted [here](https://tony01230.github.io/html-toys/university/index.html)
+#### App can be found hosted [here](https://protoconal.github.io/html-toys/university/dist/index.html)
 
 ## How to add your additions
  - More Icons! You can add more University Icons!
