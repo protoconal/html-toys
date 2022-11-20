@@ -6,7 +6,7 @@ def sortKey(e):
     return abs(e['rating'] * e['playCount'])
 
 updatedMusic.sort(key=sortKey, reverse=True)
-updatedMusic = [x['title'] for x in updatedMusic]
+updatedMusic = [x['title'] + "_" + x['artists'][0] for x in updatedMusic]
 
 with open("overrideRanking.csv", "r", encoding="utf-8") as f:
     overrideRanking = [x.split(', ') for x in f.readlines()]
